@@ -1,3 +1,4 @@
+import os
 from redbot.core import commands
 import asyncio
 from re import split
@@ -28,7 +29,37 @@ class Levelcog(commands.Cog):
         self.client = None
         self.collection = None
         self.connected = False # Whether the bot is connected to the db.
-        json_dict = json.load(open('data.json', 'r'))
+        if 'data.json' in os.listdir():
+            json_dict = json.load(open('data.json', 'r'))
+        else: 
+            file = open('data.json', 'w')
+            json.dump({
+                "xp_per_message": 20,
+                "bonus_xp_rate": 2,
+                "voice_xp_rate": 5,
+                "solo_xp": True,
+                "muted_xp": False,
+                "deafened_xp": False,
+                "level_factor": 150,
+                "level_up_channel": None,
+                "daily_leaderboard_channel": None,
+                "monthly_leaderboard_channel": None,
+                "month": "october",
+                "embed_data": {
+                },
+                "bonus_days": [
+                ],
+                "blacklisted": {
+                    "channels": [],
+                    "categories": []
+                },
+                "last_messages": {
+                },
+                "roles": [
+                ]
+            }, file, indent = 4)
+            file.close()
+            json_dict = json.load(open('data.json', 'r'))
         self.xp_per_message = json_dict['xp_per_message']
         self.voice_xp_rate = json_dict['voice_xp_rate']
         self.bonus_xp_rate = json_dict['bonus_xp_rate']
